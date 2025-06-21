@@ -88,6 +88,10 @@ try {
             ?>
             <div class="wahlgang">
                 <h3><?php echo htmlspecialchars($wahlgang['titel']); ?></h3>
+                <form action="wahl_auswertung.php" method="post">
+                    <input type="hidden" name="wahlgang" value="<?php echo htmlspecialchars($wahlgang['id']); ?>">
+                    <button type="submit">Wahlgang auswerten</button>
+                </form>
                 <p><strong>Anzahl Posten:</strong> <?php echo htmlspecialchars($wahlgang['anzahl_posten']); ?></p>
                 <p><strong>Start:</strong> <?php echo $startStr; ?></p>
                 <p><strong>Ende:</strong> <?php echo $endStr; ?></p>

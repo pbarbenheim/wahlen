@@ -27,11 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit(1);
     }
 
-    $wahlSql = "INSERT INTO wahl (name, user_id) VALUES (?, ?)";
-    $stmt = $db->prepare($wahlSql);
-    $stmt->execute([$name, $user]);
-    $wahlId = $db->insert_id;
-
     $wahlgangNamen = $_POST['wahlgang_name'] ?? [];
     $wahlgangAnzahl = $_POST['wahlgang_anzahl'] ?? [];
     $wahlgangBeginn = $_POST['wahlgang_beginn'] ?? [];
@@ -50,6 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kandidatenStmt = $db->prepare($kandidatenSql);
 
     $kandidatenVerbindungStmt = $db->prepare("INSERT INTO wahlgang_vorschlag (wahlgang_id, vorschlag_id) VALUES (?, ?)");
+
+    // Erstellen der Wahl
+    $wahlSql = "INSERT INTO wahl (name, user_id) VALUES (?, ?)";
+    $stmt = $db->prepare($wahlSql);
+    $stmt->execute([$name, $user]);
+    $wahlId = $db->insert_id;
 
     // Erstellen der Wahlgänge und Kandidaten
     for ($i = 0; $i < $wahlgangCount; $i++) {

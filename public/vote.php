@@ -57,16 +57,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<p class='success'>Deine Stimme wurde erfolgreich abgegeben!</p>";
             }
         }
-        if (!$wahlgang && $nextWahlgang) {
-            $wahlgang = $nextWahlgang;
-        } else {
-            // Kein nächster Wahlgang, Stimmabgabe abgeschlossen
-            echo "<main>";
-            echo "<h1>Abstimmung abgeschlossen</h1><p>Du hast alle Wahlgänge abgeschlossen. Vielen Dank für deine Teilnahme!</p>";
-            echo "<a href='index.php'>Zurück zur Startseite</a>";
-            echo "</main>";
-            include "../includes/footer.php";
-            exit;
+        if(!$wahlgang) {
+            if ($nextWahlgang) {
+                $wahlgang = $nextWahlgang;
+            } else {
+                // Kein nächster Wahlgang, Stimmabgabe abgeschlossen
+                echo "<main>";
+                echo "<h1>Abstimmung abgeschlossen</h1><p>Du hast alle Wahlgänge abgeschlossen. Vielen Dank für deine Teilnahme!</p>";
+                echo "<a href='index.php'>Zurück zur Startseite</a>";
+                echo "</main>";
+                include "../includes/footer.php";
+                exit;
+            }
         }
     }
 } else {
@@ -116,7 +118,9 @@ if ($endDate->diff(new DateTimeImmutable())->invert === 0) {
 if ($startDate->diff(new DateTimeImmutable())->invert === 1) {
     echo "<main>";
     echo "<h1>Wahlgang noch nicht aktiv</h1><p>Dieser Wahlgang ist noch nicht aktiv. Bitte warte, bis der Wahlgang beginnt.</p>";
+    echo "<p>Serverzeit: " . date("d.m.Y H:i") . "</p>";
     echo "<p>Startzeit: " . date("d.m.Y H:i", $wahlgang['start']) . "</p>";
+    echo "<p>Endzeit: " . date("d.m.Y H:i", $wahlgang['end']) . "</p>";
     echo "<form method='post' action=''>";
     echo "<input type='hidden' name='skip' value='reload'>";
     echo "<input type='hidden' name='code' value='$code'>";
