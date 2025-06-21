@@ -1,0 +1,57 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+%\usepackage{easyReview}
+
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+	\titlehead{Modul: Web Engineering II}
+	\subject{Projektdokumentation}
+	\author{Paul Barbenheim \\ Matrikel-Nr.: 6009834???}
+	\title{Webwahl}
+	\subtitle{Webbasiertes Wählen von Vereinsvorständen}
+	\date{Abgabedatum: \today}
+	
+	
+	\maketitle
+	
+	\section{Technische Dokumentation}
+	
+	\section{Benutzerdokumentation}
+	
+	\subsection{Installation und Inbetriebnahme}
+	Zur Verwendung von Webwahl werden einige Software-Komponenten benötigt. Dazu zählen eine PHP-Serverumgebung und eine MySQL-Datenbank. Zur Entwicklung der Anwendung wurde eine Docker-Compose-Umgebung verwendet, wie sie in \file{compose.yml} spezifiziert ist. Bei der Installation ist darauf zu achten, dass die richtigen Versionen verwendet werden. Die folgende Tabelle liefert Aufschluss über die Versionen, welche mindestens vorhanden sein müssen.\\
+	
+	\begin{tabular}{|c|c|}
+		\hline
+		PHP & 8.3 \\
+		\hline
+		MySQL & 9.3 \\
+		\hline
+	\end{tabular}\\\\
+	
+	Die beste Kompatibilität wird erreicht, wenn die Docker-Umgebung genutzt wird. Falls dies nicht der Fall ist, muss der öffentliche Pfad des Servers auf den \file{/public}"~Unterordner gesetzt werden. Ebenso müssen die Datenbank-Zugangsdaten im Kopf von \file{/includes/db.php} geändert werden.
+	Unterpfad-Kompatibilität?????
+	
+	Wird die Docker-Umgebung verwendet oder die obigen Schritte ausgeführt, so ist Webwahl zur Benutzung bereit. Das erste Laden des Tools benötigt etwas länger, da sich die Datenbank installiert. Hierzu ist es wichtig, dass Webwahl einen root-Zugang in MySQL hat, um genügend Rechte zur Datenbankerstellung zu haben. In der Docker-Umgebung ist dies der Fall. Nach erfolgreichem Installieren der Datenbank-Struktur öffnet sich die Startseite von Webwahl.
+	
+	\subsection{Registrierung und Anmeldung}
+	Da alle Funktionen bis auf das Ausfüllen eines Stimmzettels nur als angemeldeter Nutzer möglich sind, muss erst ein Nutzerkonto erstellt werden. Dazu kann die Datei \file{register.php} angesteuert oder der entsprechende Link im Header verwendet werden. Nach Abschicken des Formulars kann der Nutzer sich anmelden. Dies erfolgt über die entsprechenden Verlinkungen oder die Datei \file{login.php}. Nach erfolgreicher Anmeldung sind die erweiterten Funktionen der Anwendung wie Wahlen erstellen oder auszählen freigeschaltet. Das Passwort wird verschlüsselt gespeichert, sodass aus den Inhalten der Datenbank nicht auf das Passwort gefolgt werden kann.
+	
+	\subsection{Wahl erstellen}
+	Um eine Wahl zu erstellen muss der Nutzer angemeldet sein. Dann lässt sich die Datei \file{create\_wahl.php} öffnen oder die entsprechende Verlinkung nutzen. In dem Formular lassen sich mehrere Wahlgänge zu einer Wahl hinzufügen. Dies entspricht bei einer klassischen Vereinsvorstandswahl beispielsweise folgenden Wahlgängen.
+	\begin{itemize}
+		\item 1. Vorsitzender
+		\item 2. Vorsitzender
+		\item Kassenwart
+		\item Beisitzer (3 Stück)
+	\end{itemize}
+	Es lässt sich demnach einstellen, wie viele Personen in einem Wahlgang gewählt werden sollen. Bei einer Person und einem Vorschlag entspricht dies einer Ja/Nein-Wahl. Bei mehreren Vorschlägen kann einer ausgewählt werden. Werden mehrere Personen in einem Wahlgang gewählt, wie beispielsweise bei Beisitzern, so hat der Wähler so viele Stimmen wie Personen gewählt werden, unabhängig davon, wie viele Kandidaten es gibt.\\
+	
+	\noindent Des Weiteren hat jeder Wahlgang einen eigenen Start- und End-Zeitpunkt. Diese können parallel gesetzt werden, was eine direkte Abstimmung in allen Wahlgängen ermöglicht. Sie können aber auch in einem gewissen Takt gesetzt werden, um erst einen Wahlgang auszuwerten und dann den nächsten abzustimmen.
+	
+	\subsection{Wahl betrachten und auswerten}
+	Nach erfolgreichem Erstellen einer Wahl lässt sich diese detailliert unter dem Abschnitt \textit{Meine Wahlen} oder \file{my\_wahlen.php} betrachten.
+	
+\end{document}
