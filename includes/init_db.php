@@ -42,9 +42,7 @@ $init = function($DBCONN) {
 
     create table if not exists waehler (
         id integer primary key auto_increment,
-        name varchar(255),
         code varchar(255) not null unique,
-        secret_hash varchar(255) not null,
         wahl_id integer not null references wahl(id),
         index (wahl_id)
     );
