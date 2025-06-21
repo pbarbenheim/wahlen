@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password === $confirm_password) {
         $stmt = $db->prepare("INSERT INTO user (username, passhash) VALUES (?, ?)");
         $stmt->execute([$username, password_hash($password, PASSWORD_DEFAULT)]);
-        header("Location:login.php?from=register", );
+        header("Location:login.php?from=register");
     } else {
         $res = "<p class='error'>Passwörter stimmen nicht überein!</p>";
     }

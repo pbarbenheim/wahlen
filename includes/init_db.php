@@ -75,5 +75,3 @@ $init = function($DBCONN) {
     return true;
 };
 return $init;
-
-?>
