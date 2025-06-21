@@ -55,6 +55,7 @@ try {
     <p>Hier findest du alle Informationen zu deiner Wahl</p>
 
     <h2>Wahlberechtigte</h2>
+    <div class="table-div">
     <table>
         <thead>
         <tr>
@@ -73,6 +74,7 @@ try {
         <?php } ?>
         </tbody>
     </table>
+    </div>
 
     <h2>Wahlgänge</h2>
     <div class="wahlgaenge">

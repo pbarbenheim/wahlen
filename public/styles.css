@@ -2,6 +2,11 @@
     font-size: 18px;
     --primary-color: #067624;
 }
+@media (max-width: 768px) {
+    :root {
+        font-size: 16px;
+    }
+}
 
 .d-none {
     display: none !important;
@@ -10,7 +15,7 @@
 a {
     color: var(--primary-color);
 }
-a:hover, a:visited {
+a:hover {
     filter: brightness(40%);
 }
 
@@ -53,6 +58,7 @@ nav a {
 }
 nav a:hover {
     text-decoration: underline;
+    filter: none;
 }
 
 button, input[type=submit] {
@@ -143,4 +149,9 @@ form .success {
     border: 1px solid var(--primary-color);
     border-radius: 0.25rem;
     padding: 0.5rem;
+}
+
+.table-div {
+    max-width: 100%;
+    overflow-x: auto;
 }
