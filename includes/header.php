@@ -1,3 +1,7 @@
+<?php
+require_once "config.php";
+
+?>
 <header>
     <nav>
         <ul>

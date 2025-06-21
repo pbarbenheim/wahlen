@@ -1,4 +1,5 @@
 <?php
+require_once "config.php";
 
 $init = function($DBCONN) {
     // Create tables if they don't exist

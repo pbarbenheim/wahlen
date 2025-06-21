@@ -1,4 +1,6 @@
 <?php
+require_once "../includes/config.php";
+
 $user = include "../includes/auth.php";
 if (!$user) {
     header("Location: login.php");

@@ -1,4 +1,6 @@
 <?php
+require_once "../includes/config.php";
+
 $PAGE_TITLE = "Abmelden";
 include "../includes/head.php";
 include "../includes/header.php";

@@ -1,4 +1,5 @@
 <?php
+require_once "config.php";
 
 $servername = "db:3306";
 $username = "root";

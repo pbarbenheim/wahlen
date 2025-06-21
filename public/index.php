@@ -1,4 +1,5 @@
 <?php
+require_once "../includes/config.php";
 
 $PAGE_TITLE = "Wahlen-Tool";
 include "../includes/head.php";
