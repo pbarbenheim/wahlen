@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </div>
 
-        <button type="button" id="add-wahlgang">Wahlgang hinzufügen</button>
+        <button class="secondary" type="button" id="add-wahlgang">Wahlgang hinzufügen</button>
 
         <input type="submit" id="submit" value="Wahl erstellen">
     </form>
