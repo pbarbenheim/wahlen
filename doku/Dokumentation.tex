@@ -1,5 +1,8 @@
 \documentclass[a4paper]{scrartcl}
 \usepackage[ngerman]{babel}
+
+\usepackage{dirtree}
+
 %\usepackage{easyReview}
 
 \newcommand{\file}[1]{\texttt{#1}}
@@ -8,7 +11,7 @@
 \begin{document}
 	\titlehead{Modul: Web Engineering II}
 	\subject{Projektdokumentation}
-	\author{Paul Barbenheim \\ Matrikel-Nr.: 6009834???}
+	\author{Paul Barbenheim \\ Matrikel-Nr.: 6009438}
 	\title{Webwahl}
 	\subtitle{Webbasiertes Wählen von Vereinsvorständen}
 	\date{Abgabedatum: \today}
@@ -17,11 +20,66 @@
 	\maketitle
 	
 	\section{Technische Dokumentation}
+	Die Anwendung \textit{Webwahl} wurde im Rahmen des Moduls \textit{Webengineering II} erstellt. Es verfolgt das Ziel, einfache Wahlen digital durchführbar zu machen. Von der Größe der Wahlen richtet sich \textit{Webwahl} primär an (kleinere) Vereine. Wahlen können erstellt werden und die Stimmabgabe erfolgt vollständig im Web, wie auch die Auswertung. Die Software berücksichtigt aktuelle Standards der Web-Entwicklung, wie eine semantische HTML5-Struktur, responsives Design und eine klare Strukturierung im Quellcode.
+	
+	\subsection{Struktur}
+	Die Struktur des Projekts ist wie folgt aufgebaut:
+	
+	\dirtree{%
+		.1 webwahl.
+		.2 doku.
+		.3 Dokumentation.pdf.
+		.3 (...).
+		.2 includes.
+		.3 auth.php.
+		.3 config.php.
+		.3 db.php.
+		.3 footer.php.
+		.3 head.php.
+		.3 header.php.
+		.3 init\_db.php.
+		.3 util.php.
+		.2 public.
+		.3 css.
+		.4 styles.css.
+		.3 js.
+		.4 create\_wahl.js.
+		.4 wahl.js.
+		.3 create\_wahl.php.
+		.3 index.php.
+		.3 login.php.
+		.3 logout.php.
+		.3 my\_wahlen.php.
+		.3 register.php.
+		.3 vote.php.
+		.3 wahl.php.
+		.3 wahl\_auswertung.php.
+		.2 compose.yaml.
+	}
+	\vspace{\baselineskip}
+	
+	\noindent Im Ordner \file{doku} liegt dieses Dokument inklusive seiner Quelldateien in \LaTeX. In \file{includes} werden verschiedene Funktionen bereitgestellt. Dazu gehört das Erstellen einer Datenbankverbindung (\file{db.php}), das Erstellen der Datenbankstruktur (\file{init\_db.php} und \file{db.php}), Authentifizierungscheck (\file{auth.php}), Hilfsfunktionen (\file{util.php}) und die Konfigurationsdatei \file{config.php} sowie weitere Layout-Dateien, welche hauptsächlich HTML5-Bausteine enthalten und somit leicht wiederverwendet werden können (\file{footer.php}, \file{head.php} \& \file{header.php}).\\
+	
+	\noindent Im \file{public}-Ordner liegen die öffentlich zugreifbaren Dateien. PHP-Dateien hier enthalten sowohl Geschäftslogik als auch Präsentationsbausteine, wie es in der PHP-Entwicklung üblich ist. Dem Nutzer werden mehrere Funktionen zur Verfügung gestellt: Login-Funktionen (\file{login.php}, \file{logout.php} \& \file{register.php}), Wahlen-Erstellung (\file{create\_wahl.php}), Wahlanzeige und -auswertung (\file{my\_wahlen.php}, \file{wahl.php} \& \file{wahl\_auswertung.php}) und die eigentliche Stimmabgabe (\file{vote.php}). Diese Dateien sind in einem Unterordner, um Fehlkonfigurationen am Webserver zu verhindern. Der Server muss hier so konfiguriert werden, dass der \file{public}-Ordner das öffentliche Verzeichnis hat. Eine Fehlkonfiguration wird somit offensichtlich, da die Anwendung nicht funktionieren würde. Außerdem wird sichergestellt, dass die \textit{include}-Dateien auf keinen Fall ausgeliefert werden. Dies wird sonst oft falsch konfiguriert und Datenbank-Zugriffsdaten so geleakt.\\
+	
+	\noindent Zuletzt ist noch eine \file{compose.yaml} vorhanden. Diese stellt eine Docker-Entwicklungsumgebung bereit, in der alles zur Verwendung von \textit{Webwahl} vorkonfiguriert ist, sodass die direkte Entwicklung möglich ist.
+	
+	\subsection{Technologien}
+	Die eingesetzten Technologien sind HTML5 zum strukturierten Aufbau der Seite, CSS3 für das Layout in externen Stylesheets, PHP 8.3 zur Backend-Entwicklung, MySQL als relationale Datenbank zur Speicherung und Docker zum Aufsetzen der Entwicklungsumgebung, sowie JavaScript um dynamische Funktionen im Browser bereitzustellen.\\
+	
+	\noindent Es kommt standardkonformes HTML5 zum Einsatz, um eine größtmögliche Kompatibilität zu gewährleisten. Das Layout wird über extern eingebundene CSS3-Stylesheets erstellt, um eine Modularisierung des Quellcodes zu erreichen. Selbiges ist auch beim JavaScript der Fall.\\
+	
+	\noindent In der Datenbank werden innerhalb von sieben Tabellen die Daten in normalisierter Form gespeichert. Somit wird eine Mehrfachspeicherung von Daten verhindert. Lediglich die Stimmzettel-Daten existieren doppelt, einmal in der Form des Stimmzettels und in der Form des Ergebnisses. Dies geschieht, da die Wahl erst nach allen Stimmabgaben ausgezählt wird.
+	Die genaue Datenbank-Struktur lässt sich dem E-R-Diagramm entnehmen oder der Datei \file{/includes/init\_db.php}, in der die Datenbank-Struktur aufgebaut wird.
+	Die Datenbank-Zugriffe erfolgen mittels der aktuellen PHP-Erweiterung \textit{mysqli}. Alle Abfragen abgesehen von der Datenbank-Erstellung erfolgen über sogenannte \textit{Prepared Statements}, um \textit{SQL Injections} zu verhindern. \\
+	
+	\noindent Die serverseitige Logik verarbeitet Formulardaten über Post-Abfragen. Nach erfolgreichem Login wird eine Session gestartet, um den Benutzer zu speichern. Alle Seiten, bis auf die Startseite und die Stimmzettel-Seite (\file{vote.php}) fragen vorher den Benutzer ab. Auch die Nutzerzugehörigkeit zu der jeweiligen Wahl wird geprüft.
+	
 	
 	\section{Benutzerdokumentation}
 	
 	\subsection{Installation und Inbetriebnahme}
-	Zur Verwendung von Webwahl werden einige Software-Komponenten benötigt. Dazu zählen eine PHP-Serverumgebung und eine MySQL-Datenbank. Zur Entwicklung der Anwendung wurde eine Docker-Compose-Umgebung verwendet, wie sie in \file{compose.yml} spezifiziert ist. Bei der Installation ist darauf zu achten, dass die richtigen Versionen verwendet werden. Die folgende Tabelle liefert Aufschluss über die Versionen, welche mindestens vorhanden sein müssen.\\
+	Zur Verwendung von \textit{Webwahl} werden einige Software-Komponenten benötigt. Dazu zählen eine PHP-Serverumgebung und eine MySQL-Datenbank. Zur Entwicklung der Anwendung wurde eine Docker-Compose-Umgebung verwendet, wie sie in \file{compose.yml} spezifiziert ist. Bei der Installation ist darauf zu achten, dass die richtigen Versionen verwendet werden. Die folgende Tabelle liefert Aufschluss über die Versionen, welche mindestens vorhanden sein müssen.\\
 	
 	\begin{tabular}{|c|c|}
 		\hline
@@ -31,10 +89,11 @@
 		\hline
 	\end{tabular}\\\\
 	
-	Die beste Kompatibilität wird erreicht, wenn die Docker-Umgebung genutzt wird. Falls dies nicht der Fall ist, muss der öffentliche Pfad des Servers auf den \file{/public}"~Unterordner gesetzt werden. Ebenso müssen die Datenbank-Zugangsdaten im Kopf von \file{/includes/db.php} geändert werden.
-	Unterpfad-Kompatibilität?????
+	\noindent Die beste Kompatibilität wird erreicht, wenn die Docker-Umgebung genutzt wird. Falls dies nicht der Fall ist, muss der öffentliche Pfad des Servers auf den \file{/public}"~Unterordner gesetzt werden. Ebenso müssen die Datenbank-Zugangsdaten im Kopf von \file{/includes/db.php} geändert werden.\\
 	
-	Wird die Docker-Umgebung verwendet oder die obigen Schritte ausgeführt, so ist Webwahl zur Benutzung bereit. Das erste Laden des Tools benötigt etwas länger, da sich die Datenbank installiert. Hierzu ist es wichtig, dass Webwahl einen root-Zugang in MySQL hat, um genügend Rechte zur Datenbankerstellung zu haben. In der Docker-Umgebung ist dies der Fall. Nach erfolgreichem Installieren der Datenbank-Struktur öffnet sich die Startseite von Webwahl.
+	\noindent Des weiteren kann noch eine Konfiguration vorgenommen werden. Dies betrifft nur die eingestellte Zeitzone. Diese lässt sich in \file{/includes/config.php} ändern. Die Standard-Zeitzone ist \code{Europe/Berlin}. Im deutschsprachigen Raum muss die Konfiguration demnach nicht geändert werden.\\
+	
+	\noindent Wird die Docker-Umgebung verwendet oder die obigen Schritte ausgeführt, so ist \textit{Webwahl} zur Benutzung bereit. Das erste Laden des Tools benötigt etwas länger, da sich die Datenbank installiert. Hierzu ist es wichtig, dass \textit{Webwahl} einen root-Zugang in MySQL hat, um genügend Rechte zur Datenbankerstellung zu haben. In der Docker-Umgebung ist dies der Fall. Nach erfolgreichem Installieren der Datenbank-Struktur öffnet sich die Startseite von \textit{Webwahl}.
 	
 	\subsection{Registrierung und Anmeldung}
 	Da alle Funktionen bis auf das Ausfüllen eines Stimmzettels nur als angemeldeter Nutzer möglich sind, muss erst ein Nutzerkonto erstellt werden. Dazu kann die Datei \file{register.php} angesteuert oder der entsprechende Link im Header verwendet werden. Nach Abschicken des Formulars kann der Nutzer sich anmelden. Dies erfolgt über die entsprechenden Verlinkungen oder die Datei \file{login.php}. Nach erfolgreicher Anmeldung sind die erweiterten Funktionen der Anwendung wie Wahlen erstellen oder auszählen freigeschaltet. Das Passwort wird verschlüsselt gespeichert, sodass aus den Inhalten der Datenbank nicht auf das Passwort gefolgt werden kann.
@@ -47,11 +106,32 @@
 		\item Kassenwart
 		\item Beisitzer (3 Stück)
 	\end{itemize}
-	Es lässt sich demnach einstellen, wie viele Personen in einem Wahlgang gewählt werden sollen. Bei einer Person und einem Vorschlag entspricht dies einer Ja/Nein-Wahl. Bei mehreren Vorschlägen kann einer ausgewählt werden. Werden mehrere Personen in einem Wahlgang gewählt, wie beispielsweise bei Beisitzern, so hat der Wähler so viele Stimmen wie Personen gewählt werden, unabhängig davon, wie viele Kandidaten es gibt.\\
+	\vspace{\baselineskip}
+		
+	\noindent Es lässt sich demnach einstellen, wie viele Personen in einem Wahlgang gewählt werden sollen. Bei einer Person und einem Vorschlag entspricht dies einer Ja/Nein-Wahl. Bei mehreren Vorschlägen kann einer ausgewählt werden. Werden mehrere Personen in einem Wahlgang gewählt, wie beispielsweise bei Beisitzern, so hat der Wähler so viele Stimmen wie Personen gewählt werden, unabhängig davon, wie viele Kandidaten es gibt.\\
 	
 	\noindent Des Weiteren hat jeder Wahlgang einen eigenen Start- und End-Zeitpunkt. Diese können parallel gesetzt werden, was eine direkte Abstimmung in allen Wahlgängen ermöglicht. Sie können aber auch in einem gewissen Takt gesetzt werden, um erst einen Wahlgang auszuwerten und dann den nächsten abzustimmen.
 	
 	\subsection{Wahl betrachten und auswerten}
-	Nach erfolgreichem Erstellen einer Wahl lässt sich diese detailliert unter dem Abschnitt \textit{Meine Wahlen} oder \file{my\_wahlen.php} betrachten.
+	Nach erfolgreichem Erstellen einer Wahl lässt sich diese detailliert unter dem Abschnitt \textit{Meine Wahlen} oder \file{my\_wahlen.php} betrachten. Nach Auswahl einer Wahl wird die Wahl dargestellt. Hierzu zählen alle Codes für die Wahlberechtigten, als auch eine Darstellung aller Wahlgänge mit den Kandidaten, deren Ergebnissen und der Möglichkeit einen Wahlgang auszählen zu lassen.\\
+	
+	\noindent Die Wahlberechtigten-Codes dienen als Link zum Berechtigungsnachweis. Nur mit einem Link mit Code kann an einer Wahl teilgenommen werden. Ein Code kann nur einmal benutzt werden. Es ist jedoch möglich, Wahlgang 1 am ersten Tag stattfinden zu lassen und Wahlgang 2 an einem zweiten Tag. Hier muss der Wähler nicht die gesamte Zeit den Browser offen haben, sondern kann nach erfolgreicher Stimmabgabe im Wahlgang 1 das Fenster schließen und am Folgetag den Code-Link nochmals aufrufen. Das System merkt, sich wo ein Wähler stehen geblieben ist.\\
+	
+	\noindent Sobald ein Wahlgang zeitlich abgelaufen ist, oder alle Wahlberechtigten einen Stimmzettel abgegeben haben, lässt sich der Wahlgang auszählen. Dies geschieht über die Wahl-Übersichtsseite. Danach stehen auf besagter Seite hinter den Kandidaten die Anzahl der auf sie abgegebenen Stimmen. Eine Ergebnisfeststellung durch \textit{Webwahl} geschieht bewusst nicht, um diesen essenziellen Teil einer Wahl dem jeweiligen Wahlleiter zu überlassen.
+	
+	\subsection{Wählen}
+	Das Wählen erfolgt über eine intuitive Maske, welche mit Aufrufen des jeweiligen Code-Links gestartet wird. Der Wähler kann ungültig wählen, aber nicht, indem zu viele Stimmen abgegeben werden. Dies ist die einzige Eingabe, welche die Software verhindert.\\
+	
+	\noindent Schon deswegen genügt \textit{Webwahl} nicht den Anforderungen des Art. 38 GG, auch aufgrund des Auszählungsmechanismus und der Speicherung der Daten. Nichtsdestotrotz ist \textit{Webwahl} beispielsweise für Vorstandswahlen von Vereinen geeignet, da hier nicht die strengen Anforderungen des Art. 38 GG greifen und eine einfache Lösung zu bevorzugen ist. Solange die Datenbank nicht mit der Verteilung der Code-Links, welche dem Nutzer obliegt, zusammengeführt wird, ist eine anonyme Stimmabgabe gewährleistet.
+	
+	
+	
+	
+	
 	
 \end{document}
+
+
+
+
+
