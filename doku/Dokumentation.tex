@@ -70,7 +70,7 @@
 	\noindent Es kommt standardkonformes HTML5 zum Einsatz, um eine größtmögliche Kompatibilität zu gewährleisten. Das Layout wird über extern eingebundene CSS3-Stylesheets erstellt, um eine Modularisierung des Quellcodes zu erreichen. Selbiges ist auch beim JavaScript der Fall.\\
 	
 	\noindent In der Datenbank werden innerhalb von sieben Tabellen die Daten in normalisierter Form gespeichert. Somit wird eine Mehrfachspeicherung von Daten verhindert. Lediglich die Stimmzettel-Daten existieren doppelt, einmal in der Form des Stimmzettels und in der Form des Ergebnisses. Dies geschieht, da die Wahl erst nach allen Stimmabgaben ausgezählt wird.
-	Die genaue Datenbank-Struktur lässt sich dem E-R-Diagramm entnehmen oder der Datei \file{/includes/init\_db.php}, in der die Datenbank-Struktur aufgebaut wird.
+	Die genaue Datenbank-Struktur lässt sich dem E-R-Diagramm (\file{ER-Diagramm.png}) entnehmen oder der Datei \file{/includes/init\_db.php}, in der die Datenbank-Struktur aufgebaut wird.
 	Die Datenbank-Zugriffe erfolgen mittels der aktuellen PHP-Erweiterung \textit{mysqli}. Alle Abfragen abgesehen von der Datenbank-Erstellung erfolgen über sogenannte \textit{Prepared Statements}, um \textit{SQL Injections} zu verhindern. \\
 	
 	\noindent Die serverseitige Logik verarbeitet Formulardaten über Post-Abfragen. Nach erfolgreichem Login wird eine Session gestartet, um den Benutzer zu speichern. Alle Seiten, bis auf die Startseite und die Stimmzettel-Seite (\file{vote.php}) fragen vorher den Benutzer ab. Auch die Nutzerzugehörigkeit zu der jeweiligen Wahl wird geprüft.
@@ -123,9 +123,6 @@
 	Das Wählen erfolgt über eine intuitive Maske, welche mit Aufrufen des jeweiligen Code-Links gestartet wird. Der Wähler kann ungültig wählen, aber nicht, indem zu viele Stimmen abgegeben werden. Dies ist die einzige Eingabe, welche die Software verhindert.\\
 	
 	\noindent Schon deswegen genügt \textit{Webwahl} nicht den Anforderungen des Art. 38 GG, auch aufgrund des Auszählungsmechanismus und der Speicherung der Daten. Nichtsdestotrotz ist \textit{Webwahl} beispielsweise für Vorstandswahlen von Vereinen geeignet, da hier nicht die strengen Anforderungen des Art. 38 GG greifen und eine einfache Lösung zu bevorzugen ist. Solange die Datenbank nicht mit der Verteilung der Code-Links, welche dem Nutzer obliegt, zusammengeführt wird, ist eine anonyme Stimmabgabe gewährleistet.
-	
-	
-	
 	
 	
 	
