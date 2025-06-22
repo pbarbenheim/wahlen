@@ -4,15 +4,6 @@ require_once "../includes/config.php";
 $PAGE_TITLE = "Wahlen-Tool";
 include "../includes/head.php";
 include "../includes/header.php";
-
-$user = include "../includes/auth.php";
-
-// Überprüfen, ob der Benutzer angemeldet ist
-if (!$user) {
-    // Hier könnte noch eine Landing-Page für nicht angemeldete Benutzer sein
-    header("Location: login.php");
-    exit;
-} else {
 ?>
 
 <main>
@@ -21,6 +12,6 @@ if (!$user) {
 </main>
 
 <?php
-}
+
 
 include "../includes/footer.php";
